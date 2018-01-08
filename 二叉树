@@ -1,0 +1,98 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define STACKSIZE 10
+#define OK 1
+#define ERROR 0
+typedef int Status;
+typedef char ElemType;
+typedef struct BiTNode
+{
+	ElemType data;
+	struct BiTNode *lchild,*rchild;
+}BiTree,*PBiTree;
+PBiTree CreatTree(PBiTree root);
+Status PreOrder(PBiTree root);
+Status PostOrder(PBiTree root);
+Status InOrder(PBiTree root);
+int main()
+{ 
+    BiTree *tree=NULL;
+    printf("输入根节点，#表示节点为空"); 
+    tree=CreatTree(tree);/*  这里将tree指针赋值为递归函数的值，
+	                      不然的话指针tree为空               */ 
+    printf("递归先序遍历：\n ") ; 
+    PreOrder(tree);
+    printf("\n"); 
+    printf("非递归中序遍历:\n ");
+    InOrder(tree);  
+	printf("\n");
+    printf("递归后序遍历：\n ") ; 
+    PostOrder(tree);
+	return 0;
+}
+
+//=========================递归创建二叉树============================// 
+PBiTree CreatTree(PBiTree root)
+{
+    ElemType ch;
+	scanf("%c",&ch);
+	if(ch=='#')
+	root=NULL;
+	else
+	{  root=(PBiTree)malloc(sizeof(BiTree));
+	   root->data=ch;
+	   root->lchild=CreatTree(root->lchild);
+	   root->rchild=CreatTree(root->rchild);
+	}//递归算法创建树 
+	return root;
+} 
+
+//================递归前序遍历 ================================// 
+Status PreOrder(PBiTree root)
+{   
+    if(root!=NULL)
+	{
+		printf("%3c",root->data);
+		PreOrder(root->lchild);
+		PreOrder(root->rchild);
+	}
+	return OK; 
+}
+//================递归后序遍历 ================================// 
+Status PostOrder(PBiTree root)
+{   
+    if(root!=NULL)
+	{
+	
+		PostOrder(root->lchild);
+		PostOrder(root->rchild);
+		printf("%3c",root->data);
+		
+	}
+	return OK; 
+}
+//=========================中序遍历非递归算法======================//
+Status InOrder(PBiTree root)
+{
+    PBiTree Stack[STACKSIZE];
+    PBiTree tree;
+    int top=0;
+    tree=root;
+    while(tree!=NULL||top!=0)
+    {
+    	
+   		if(tree)
+    		{
+    	    Stack[top++]=tree;//    入栈 
+			tree=tree->lchild;
+		    }
+	  else
+	  {
+		tree=Stack[--top];
+		printf("%3c",tree->data);
+		tree=tree->rchild;
+	   }
+	}   
+}
+		
+	
